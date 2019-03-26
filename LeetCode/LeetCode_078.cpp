@@ -49,3 +49,28 @@ public:
     }
 };
 
+/* back tracing algo
+class Solution {
+public:
+    void foo(vector<int>& nums, int pos, vector<int>& ans)
+    {
+        if (pos == nums.size()) {
+            res.push_back(ans);
+            return;
+        }
+        
+        ans.push_back(nums[pos]);
+        foo(nums, pos+1, ans);
+        ans.pop_back();
+        foo(nums, pos+1, ans);
+    }
+    
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int> ans {};
+        foo(nums, 0, ans);
+        return res;
+    }
+    
+    vector<vector<int>> res;
+};
+*/
