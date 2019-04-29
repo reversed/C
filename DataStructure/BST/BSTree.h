@@ -55,6 +55,62 @@ void BinaryTree<T>::insertNode(T val) {
 }
 
 template<class T>
+bool BinaryTree<T>::deleteNode(T data) {
+    Node<T>* pNode = findNode(data);
+    if (pNode == nullptr) {
+        std::cout << "deleteNode(): Cannot find Node in BST." << std::endl;
+        return false;
+    }
+    
+    Node<T>* p = pNode->parent;
+
+    // Case 1: delete node is leaf
+    if (pNode->left == nullptr && pNode->right == nullptr) {
+        if (p == nullptr) root = nullptr;
+        else if (p->left == pNode) p->left = nullptr;
+        else if (p->right == pNode) p->right = nullptr;
+        delete(pNode);
+    } 
+    // Case 2: delete node has only one child
+    else if (pNode->left == nullptr || pNode->right == nullptr) {
+        Node<T>* succ;
+        if (pNode->left == nullptr) succ = pNode->right;
+        if (pNode->right == nullptr) succ = pNode->left;
+
+        if (p == nullptr) {
+            root = succ;
+            succ->parent = nullptr;
+        }
+        else if (p->left == pNode) {
+            p->left = succ;
+            succ->parent = p;
+        }
+        else if (p->right == pNode) {
+            p->right = succ;
+            succ->parent = p;
+        }
+        delete(pNode);
+    }
+    // Case 3: delete node has both childs
+    else {
+        Node<T>* succ;
+        succ = pNode->right;
+        if (succ->left == nullptr) {
+            pNode->data = succ->data;
+            succ->parent->right = succ->right;
+        }
+        else {
+            while (succ->left != nullptr) succ = succ->left;
+            pNode->data = succ->data;
+            succ->parent->left = succ->right;
+        }
+        if (succ->right) succ->right->parent = succ->parent;
+        delete(succ);
+    }
+    return true;
+}
+
+template<class T>
 Node<T>* BinaryTree<T>::findNode(T val) {
     Node<T> *current = root;
     while (current != nullptr) {
